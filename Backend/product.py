@@ -1,20 +1,7 @@
 from flask import Blueprint, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from models import db,Product,Category
+from models import db,Product
 # Create a Blueprint for the product module
 product_bp = Blueprint('product', __name__)
-
-# Define the Product model
-'''db = SQLAlchemy()
-
-class Product(db.Model):
-    __tablename__ = 'product'
-    product_id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String)
-    price = db.Column(db.Float)
-    description = db.Column(db.String)
-    image_url = db.Column(db.String)
-    # No need for category_id and category relationship'''
 
 @product_bp.route('/product/<string:product_id>', methods=['GET'])
 def get_product(product_id: str) -> jsonify:

@@ -5,7 +5,7 @@ from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
 import logging
 from models import db, Product, Category  # Import 'db' object from models.py
-import pdb
+
 logging.basicConfig(level=logging.DEBUG)
 
 data_ingestion_bp = Blueprint('data_ingestion', __name__)
@@ -16,7 +16,6 @@ class DataIngestion(Resource):
     REQUIRED_KEYS = {'productImage', 'catlevel1Name', 'price', 'name', 'productDescription', 'catlevel2Name', 'sku'}
 
     def post(self):
-        pdb.set_trace()
         if 'file' not in request.files:
             return jsonify({'message': 'No file part in the request'}), 400
 

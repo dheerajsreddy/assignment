@@ -13,6 +13,12 @@ class CategoryAPI(Resource):
 
 class ProductByCategoryAPI(Resource):
     def get(self, parent_name):
+        # Check if the category exists in the database
+        category = Category.query.filter_by(parent_name=parent_name).first()
+        if not category:
+            return {'message': 'Category not found'}, 404
+
+        # Category exists, fetch the products
         products = Product.query.join(Category, Product.category_id == Category.category_id) \
                                .filter(Category.parent_name == parent_name) \
                                .all()
@@ -24,8 +30,13 @@ class ProductByCategoryAPI(Resource):
 
         return products_data, 200
 
+
 class ProductBySubcategoryAPI(Resource):
     def get(self, parent_name, category_name):
+        category = Category.query.filter_by(parent_name=parent_name,category_name=category_name).first()
+        if not category:
+            return {'message': 'Category not found'}, 404
+        
         products = Product.query.join(Category, Product.category_id == Category.category_id) \
                                .filter(Category.parent_name == parent_name, Category.category_name == category_name) \
                                .all()
