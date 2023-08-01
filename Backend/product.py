@@ -1,10 +1,11 @@
-from flask import Flask, jsonify
+from flask import Blueprint, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from models import db,Product,Category
+# Create a Blueprint for the product module
+product_bp = Blueprint('product', __name__)
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dheeraj:123@localhost/apparel'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# Define the Product model
+'''db = SQLAlchemy()
 
 class Product(db.Model):
     __tablename__ = 'product'
@@ -13,9 +14,9 @@ class Product(db.Model):
     price = db.Column(db.Float)
     description = db.Column(db.String)
     image_url = db.Column(db.String)
-    # No need for category_id and category relationship
+    # No need for category_id and category relationship'''
 
-@app.route('/product/<string:product_id>', methods=['GET'])
+@product_bp.route('/product/<string:product_id>', methods=['GET'])
 def get_product(product_id: str) -> jsonify:
     """
     Retrieve product details based on the provided product_id.
@@ -43,6 +44,3 @@ def get_product(product_id: str) -> jsonify:
 
     except Exception as e:
         return jsonify({'message': f'Internal Server Error: {str(e)}'}), 500
-
-if __name__ == '__main__':
-    app.run()

@@ -1,37 +1,15 @@
-from flask import Flask, jsonify
-from flask_restful import Api, Resource
-from flask_sqlalchemy import SQLAlchemy
-import pdb
+from flask import Blueprint, jsonify
+from flask_restful import Resource, Api
+from models import db, Product, Category
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dheeraj:123@localhost/apparel'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-api = Api(app)
-
-class Category(db.Model):
-    __tablename__ = 'category'
-    category_id = db.Column(db.String, primary_key=True)
-    category_name = db.Column(db.String)
-    parent_name = db.Column(db.String)
-
-class Product(db.Model):
-    __tablename__ = 'product'
-    product_id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String)
-    price = db.Column(db.Float)
-    description = db.Column(db.String)
-    image_url = db.Column(db.String)
-    category_id = db.Column(db.String, db.ForeignKey('category.category_id'), nullable=False)
-    category = db.relationship('Category')
-
+category_bp = Blueprint('category', __name__)
+api = Api(category_bp)  # Create an Api instance for the blueprint
 
 class CategoryAPI(Resource):
     def get(self):
         categories = Category.query.all()
         categories_data = [{'category_name': category.category_name, 'parent_name': category.parent_name} for category in categories]
         return categories_data, 200
-
 
 class ProductByCategoryAPI(Resource):
     def get(self, parent_name):
@@ -59,9 +37,7 @@ class ProductBySubcategoryAPI(Resource):
 
         return products_data, 200
 
+# Add the resources to the Api instance
 api.add_resource(CategoryAPI, '/category')
 api.add_resource(ProductByCategoryAPI, '/category/<string:parent_name>')
 api.add_resource(ProductBySubcategoryAPI, '/category/<string:parent_name>/<string:category_name>')
-
-if __name__ == '__main__':
-    app.run()

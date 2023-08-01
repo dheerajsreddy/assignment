@@ -1,39 +1,22 @@
-import os
 import json
 import uuid
-from flask import Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_restful import Resource, Api
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 import logging
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'postgresql://dheeraj:123@localhost/apparel')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-api = Api(app)
-db = SQLAlchemy(app)
+from models import db, Product, Category  # Import 'db' object from models.py
+import pdb
 logging.basicConfig(level=logging.DEBUG)
 
-class Category(db.Model):
-    __tablename__ = 'category'
-    category_id = db.Column(db.String, primary_key=True)
-    category_name = db.Column(db.String)
-    parent_name = db.Column(db.String)
-
-class Product(db.Model):
-    __tablename__ = 'product'
-    product_id = db.Column(db.String, primary_key=True)
-    name = db.Column(db.String)
-    price = db.Column(db.Float)
-    description = db.Column(db.String)
-    image_url = db.Column(db.String)
-    category_id = db.Column(db.String, db.ForeignKey('category.category_id'), nullable=False)
-    category = db.relationship('Category')
+data_ingestion_bp = Blueprint('data_ingestion', __name__)
+api = Api(data_ingestion_bp)  # Create an Api instance for the blueprint
 
 class DataIngestion(Resource):
+    
     REQUIRED_KEYS = {'productImage', 'catlevel1Name', 'price', 'name', 'productDescription', 'catlevel2Name', 'sku'}
 
     def post(self):
+        pdb.set_trace()
         if 'file' not in request.files:
             return jsonify({'message': 'No file part in the request'}), 400
 
@@ -97,14 +80,8 @@ class DataIngestion(Resource):
             db.session.rollback()
             return jsonify({'message': 'Internal Server Error'}), 500
 
+        # Return a valid JSON response using the 'jsonify' function
         return {'message': 'Data ingestion successful'}, 201
 
-# Create the database tables after setting up the application context
-with app.app_context():
-    db.create_all()
-
-# Register the DataIngestion resource with the API
+# Register the DataIngestion resource with the data_ingestion_bp blueprint
 api.add_resource(DataIngestion, '/data_ingestion')
-
-if __name__ == '__main__':
-    app.run()
