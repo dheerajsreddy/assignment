@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify
-from models import db,Product
+from flask import Blueprint, jsonify, current_app
+from models import db, Product
+import json
+
 # Create a Blueprint for the product module
 product_bp = Blueprint('product', __name__)
 
@@ -15,6 +17,14 @@ def get_product(product_id: str) -> jsonify:
         JSON response: JSON object containing product details.
     """
     try:
+        # Check if the product is already in the Redis cache
+        cached_result = current_app.redis_client.get(f'product:{product_id}')
+        if cached_result:
+            # If found in cache, return the cached result
+            product_data = json.loads(cached_result)
+            print("Cache Hit")
+            return jsonify(product_data), 200
+
         # Retrieve the product based on product_id, or return 404 if not found
         product = Product.query.get_or_404(product_id)
 
@@ -26,6 +36,10 @@ def get_product(product_id: str) -> jsonify:
             'description': product.description or '',
             'image_url': product.image_url or ''
         }
+
+        # Update Redis cache with the new product data
+        current_app.redis_client.set(f'product:{product_id}', json.dumps(product_data))
+        print("Cache Miss")
 
         return jsonify(product_data), 200
 

@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from models import db
+import redis
 
 def create_app():
     app = Flask(__name__)
@@ -9,6 +10,10 @@ def create_app():
 
     # Initialize the SQLAlchemy db object with the app
     db.init_app(app)
+
+    # Create the Redis client and store it in Flask's current_app for easy access
+    redis_url = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+    app.redis_client = redis.StrictRedis.from_url(redis_url)
 
     # Import blueprints here to avoid circular imports
     from data_ingestion import data_ingestion_bp
