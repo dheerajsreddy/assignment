@@ -15,8 +15,8 @@ def create_search_bp():
         if not search_query:
             return jsonify({'message': 'Search query is missing or empty'}), 400
 
-        if search_query.isdigit():
-            try:
+        try:
+            if search_query.isdigit():
                 # Perform an exact match search for SKU
                 params = {'q': search_query}
 
@@ -51,15 +51,8 @@ def create_search_bp():
 
                 return jsonify(formatted_results), 200
 
-            except requests.RequestException as e:
-                return jsonify({'message': f'Error connecting to Unbxd API: {str(e)}'}), 500
-
-            except json.JSONDecodeError as e:
-                return jsonify({'message': 'Error parsing Unbxd API response'}), 500
-
-        else:
-            try:
-                # Perform a full-text search for exact match in the name field
+            else:
+                # Perform a full-text search for partial matches in the name field
                 encoded_query = urllib.parse.quote(search_query, safe=' ')
                 params = {'q': f'name:{encoded_query}'}
 
@@ -71,32 +64,33 @@ def create_search_bp():
                 unbxd_data = response.json()
                 search_results = unbxd_data.get('response', {}).get('products', [])
 
-                # Filter the exact match based on the name field
-                exact_match_product = None
-                for product in search_results:
-                    name = product.get('name', '')
-                    if name.lower() == search_query.lower():
-                        exact_match_product = product
-                        break
-
-                if not exact_match_product:
+                if not search_results:
                     return jsonify({'message': 'No products found with the given query'}), 404
 
-                # Format the exact matched product with the required fields
-                formatted_product = {
-                    'sku': exact_match_product.get('sku', ''),
-                    'name': exact_match_product.get('name', ''),
-                    'price': float(exact_match_product.get('price', 0.0)),
-                    'product_description': exact_match_product.get('productDescription', ''),
-                    'product_image': exact_match_product.get('productImage', ''),
-                }
+                # Format the search results with the required fields
+                formatted_results = []
+                for product in search_results:
+                    sku = product.get('sku', '')
+                    name = product.get('name', '')
+                    price = float(product.get('price', 0.0))
+                    product_description = product.get('productDescription', '')
+                    product_image = product.get('productImage', '')
 
-                return jsonify(formatted_product), 200
+                    formatted_product = {
+                        'sku': sku,
+                        'name': name,
+                        'price': price,
+                        'product_description': product_description,
+                        'product_image': product_image,
+                    }
+                    formatted_results.append(formatted_product)
 
-            except requests.RequestException as e:
-                return jsonify({'message': f'Error connecting to Unbxd API: {str(e)}'}), 500
+                return jsonify(formatted_results), 200
 
-            except json.JSONDecodeError as e:
-                return jsonify({'message': 'Error parsing Unbxd API response'}), 500
+        except requests.RequestException as e:
+            return jsonify({'message': f'Error connecting to Unbxd API: {str(e)}'}), 500
+
+        except json.JSONDecodeError as e:
+            return jsonify({'message': 'Error parsing Unbxd API response'}), 500
 
     return search_bp
