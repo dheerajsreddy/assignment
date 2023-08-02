@@ -1,5 +1,5 @@
 node_modules
 .DS_Store
-dump.rbd
+dump.rdb
 package-lock.json
 package.json
