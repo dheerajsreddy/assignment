@@ -6,45 +6,17 @@
 		"_exporter_id": "28771152"
 	},
 	"item": [
-		{
-			"name": "Data Ingestion API",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/Users/unbxd/Desktop/Unbxd/Assignment/Data/out.json"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:5000/data_ingestion",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"data_ingestion"
-					]
-				}
-			},
-			"response": []
-		},
+		
 		{
 			"name": "Product API",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/product/00310194",
+					"raw": "http://127.0.0.1:5000/product/00310194",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "5000",
 					"path": [
@@ -61,10 +33,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/category",
+					"raw": "http://127.0.0.1:5000/category",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "5000",
 					"path": [
@@ -80,10 +52,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/category/men",
+					"raw": "http://127.0.0.1:5000/category/men",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "5000",
 					"path": [
@@ -100,10 +72,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/category/women/Work",
+					"raw": "http://127.0.0.1:5000/category/women/Work",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127.0.0.1"
 					],
 					"port": "5000",
 					"path": [
@@ -124,10 +96,7 @@
 					"raw": "http://127.0.0.1:5000/search?q=80001919",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"127.0.0.1"
 					],
 					"port": "5000",
 					"path": [
