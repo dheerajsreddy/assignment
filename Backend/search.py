@@ -5,6 +5,11 @@ import json
 
 search_bp = Blueprint('search', __name__)
 
+class NotAlphanumericError(Exception):
+    def __init__(self, message="The input must be alphanumeric"):
+        self.message = message
+        super().__init__(self.message)
+        
 def create_search_bp():
     unbxd_api_url = f'https://search.unbxd.io/fb853e3332f2645fac9d71dc63e09ec1/demo-unbxd700181503576558/search'
 
@@ -16,7 +21,8 @@ def create_search_bp():
             return jsonify({'message': 'Search query is missing or empty'}), 400
 
         try:
-            if search_query.isdigit():
+            search_query_copy=search_query.replace(" ","")
+            if search_query_copy.isalpha() or search_query.isdigit():
                 # Perform an exact match search for SKU
                 params = {'q': search_query}
 
@@ -50,43 +56,12 @@ def create_search_bp():
                     formatted_results.append(formatted_product)
 
                 return jsonify(formatted_results), 200
-
             else:
-                # Perform a full-text search for partial matches in the name field
-                encoded_query = urllib.parse.quote(search_query, safe=' ')
-                params = {'q': f'name:{encoded_query}'}
-
-                # Make the request to the Unbxd API for alphabetic search
-                response = requests.get(unbxd_api_url, params=params)
-                response.raise_for_status()
-
-                # Process the response and extract relevant product information
-                unbxd_data = response.json()
-                search_results = unbxd_data.get('response', {}).get('products', [])
-
-                if not search_results:
-                    return jsonify({'message': 'No products found with the given query'}), 404
-
-                # Format the search results with the required fields
-                formatted_results = []
-                for product in search_results:
-                    sku = product.get('sku', '')
-                    name = product.get('name', '')
-                    price = float(product.get('price', 0.0))
-                    product_description = product.get('productDescription', '')
-                    product_image = product.get('productImage', '')
-
-                    formatted_product = {
-                        'sku': sku,
-                        'name': name,
-                        'price': price,
-                        'product_description': product_description,
-                        'product_image': product_image,
-                    }
-                    formatted_results.append(formatted_product)
-
-                return jsonify(formatted_results), 200
-
+                raise NotAlphanumericError("The input should not be alphanumeric")
+             
+        except NotAlphanumericError as e:
+            return jsonify({'message': f'Query string is alphanumeric: {str(e)}'}), 500
+                    
         except requests.RequestException as e:
             return jsonify({'message': f'Error connecting to Unbxd API: {str(e)}'}), 500
 
