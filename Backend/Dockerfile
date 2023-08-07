@@ -6,12 +6,8 @@ WORKDIR /app
 
 # Copy the entire application code into the container
 COPY . /app
-
 # Install the required Python packages
-RUN pip install -r requirements.txt
-
-# Install Redis server inside the container (if your app requires it)
-RUN apt-get update && apt-get install -y redis-server
+RUN pip3 install -r requirements.txt
 
 # Expose the ports for Flask, PostgreSQL, and Redis
 EXPOSE 5000
@@ -21,9 +17,5 @@ EXPOSE 6379
 # Set environment variable for Flask to run in production mode
 ENV FLASK_ENV=production
 
-# Create a startup script to run Redis server and the Flask application concurrently
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
 # Command to start the startup script
-CMD ["/start.sh"]
+CMD ["python3","app.py"]
