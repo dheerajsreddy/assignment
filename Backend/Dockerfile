@@ -1,21 +1,17 @@
-# Use the official Python 3.9 image as the base image
+# Use the official Python image as the base image
 FROM python:3.9.6
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the entire application code into the container
-COPY . /app
-# Install the required Python packages
+# Copy the requirements.txt file to the container
+COPY requirements.txt .
+
+# Install the Python dependencies
 RUN pip3 install -r requirements.txt
 
-# Expose the ports for Flask, PostgreSQL, and Redis
-EXPOSE 5000
-EXPOSE 5432
-EXPOSE 6379
+# Copy the source code from the src folder to the container
+COPY src /app/src
 
-# Set environment variable for Flask to run in production mode
-ENV FLASK_ENV=production
-
-# Command to start the startup script
-CMD ["python3","app.py"]
+# Start the Flask app
+CMD ["python3", "src/app.py"]

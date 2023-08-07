@@ -6,7 +6,10 @@ import redis
     
 def create_app():
     app = Flask(__name__)
+    
+    # Set the logging level to INFO
     app.logger.setLevel(logging.INFO)
+    
     # Modify the database URI to use the service name as the host in the connection URL
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://unbxd:unbxd@database-container:5432/unbxddatabase'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,9 +21,6 @@ def create_app():
     # Modify the Redis URL to use the service name as the host in the connection URL
     redis_url = os.environ.get('REDIS_URL', 'redis://redis-container:6379')
     app.redis_client = redis.StrictRedis.from_url(redis_url)
-
-    # Set the logging level to INFO
-
 
     # Import blueprints here to avoid circular imports
     from data_ingestion import data_ingestion_bp
