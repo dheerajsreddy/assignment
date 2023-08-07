@@ -1,22 +1,29 @@
-# Use the official Python 3.8 image as the base image
+# Use the official Python 3.9 image as the base image
 FROM python:3.9.6
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV FLASK_ENV=production
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the entire application code into the container
+COPY . /app
 
-# Copy the entire app directory into the container
-COPY . /app/
+# Install the required Python packages
+RUN pip install -r requirements.txt
 
-# Expose the port used by the Flask app (assuming it runs on port 5000)
+# Install Redis server inside the container (if your app requires it)
+RUN apt-get update && apt-get install -y redis-server
+
+# Expose the ports for Flask, PostgreSQL, and Redis
 EXPOSE 5000
+EXPOSE 5432
+EXPOSE 6379
 
-# Command to run the Flask app using Python 3
-CMD ["python3", "app.py"]
+# Set environment variable for Flask to run in production mode
+ENV FLASK_ENV=production
+
+# Create a startup script to run Redis server and the Flask application concurrently
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Command to start the startup script
+CMD ["/start.sh"]

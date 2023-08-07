@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  api:
+    container_name: flask-container
+    build: .
+    image: my-flask-app
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URI=postgresql://unbxd:unbxd@0.0.0.0/unbxddatabase
+      - REDIS_URL=redis://redis:6379
+
+  database:
+    image: postgres:11
+    container_name: database-container
+    environment:
+      - POSTGRES_USER=dheeraj
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=apparel
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    container_name: redis-container
+    ports:
+      - "6379:6379"
