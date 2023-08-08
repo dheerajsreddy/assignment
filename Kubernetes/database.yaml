@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-postgres
+  template:
+    metadata:
+      labels:
+        app: my-postgres
+    spec:
+      containers:
+        - name: postgres-container
+          image: postgres
+          env:
+            - name: POSTGRES_USER
+              value: unbxd
+            - name: POSTGRES_PASSWORD
+              value: unbxd
+            - name: POSTGRES_DB
+              value: unbxddatabase
+          ports:
+            - containerPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-postgres-service
+spec:
+  selector:
+    app: my-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

@@ -35,7 +35,11 @@ class ProductByCategoryAPI(Resource):
             products_data = json.loads(cached_result)
             print("Cache Hit")
             return products_data, 200
-
+        
+        category = Category.query.filter_by(parent_name=parent_name).first()
+        if not category:
+            return {'message': f'Parent category {parent_name} not found'}, 404
+        
         # Category exists, fetch the products
         products = Product.query.join(Category, Product.category_id == Category.category_id) \
                                .filter(Category.parent_name == parent_name) \
@@ -60,6 +64,10 @@ class ProductBySubcategoryAPI(Resource):
             products_data = json.loads(cached_result)
             print("Cache Hit")
             return products_data, 200
+        
+        category = Category.query.filter_by(parent_name=parent_name, category_name=category_name).first()
+        if not category:
+            return {'message': f'Subcategory {category_name} under parent category {parent_name} not found'}, 404
 
         products = Product.query.join(Category, Product.category_id == Category.category_id) \
                                .filter(Category.parent_name == parent_name, Category.category_name == category_name) \
