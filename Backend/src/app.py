@@ -11,7 +11,7 @@ def create_app():
     app.logger.setLevel(logging.INFO)
     
     # Modify the database URI to use the service name as the host in the connection URL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://unbxd:unbxd@localhost:5432/unbxddatabase'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://unbxd:unbxd@postgres-service:5432/unbxddatabase'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
 
@@ -19,7 +19,7 @@ def create_app():
     db.init_app(app)
 
     # Modify the Redis URL to use the service name as the host in the connection URL
-    redis_url = os.environ.get('REDIS_URL', 'redis://localhost:6379')
+    redis_url = os.environ.get('REDIS_URL', 'redis://redis-service:6379')
     app.redis_client = redis.StrictRedis.from_url(redis_url)
 
     # Import blueprints here to avoid circular imports

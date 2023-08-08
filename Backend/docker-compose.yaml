@@ -3,7 +3,7 @@ services:
   api:
     container_name: flask-container
     build: .
-    image: my-flask-app
+    image: flask-app
     ports:
       - "5000:5000"
 

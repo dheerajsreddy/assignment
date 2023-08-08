@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-postgres-deployment
+  name: postgres-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-postgres
+      app: postgres
   template:
     metadata:
       labels:
-        app: my-postgres
+        app: postgres
     spec:
       containers:
         - name: postgres-container
@@ -29,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-postgres-service
+  name: postgres-service
 spec:
   selector:
-    app: my-postgres
+    app: postgres
   ports:
     - protocol: TCP
       port: 5432
