@@ -27,8 +27,10 @@ def create_app():
     from product import product_bp
     from category import category_bp
     from search import create_search_bp
+    from monitor import monitor_bp
 
     # Register blueprints with the app
+    app.register_blueprint(monitor_bp)
     app.register_blueprint(data_ingestion_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(category_bp)

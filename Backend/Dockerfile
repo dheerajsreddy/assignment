@@ -13,5 +13,7 @@ RUN pip3 install -r requirements.txt
 # Copy the source code from the src folder to the container
 COPY src /app/src
 
+EXPOSE 5000
+
 # Start the Flask app
 CMD ["python3", "src/app.py"]

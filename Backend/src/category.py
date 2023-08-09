@@ -1,5 +1,5 @@
 import redis
-from flask import Blueprint, jsonify,current_app
+from flask import Blueprint,current_app
 from flask_restful import Resource, Api
 from models import db, Product, Category
 import json

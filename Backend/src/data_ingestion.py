@@ -15,13 +15,13 @@ class DataIngestion(Resource):
     
     REQUIRED_KEYS = {'productImage', 'catlevel1Name', 'price', 'name', 'productDescription', 'catlevel2Name', 'sku'}
 
-    def post(self):
+    def post(self) :
         if 'file' not in request.files:
-            return jsonify({'message': 'No file part in the request'}), 400
+            return {'message': 'No file part in the request'}, 400
 
         file = request.files['file']
         if file.filename == '':
-            return jsonify({'message': 'No selected file'}), 400
+            return {'message': 'No selected file'}, 400
 
         try:
             json_data = json.load(file)  # Load the entire JSON data into memory
@@ -67,17 +67,17 @@ class DataIngestion(Resource):
 
         except json.JSONDecodeError as e:
             logging.error(f"JSONDecodeError: {e}")
-            return jsonify({'message': 'Invalid JSON format'}), 400
+            return {'message': 'Invalid JSON format'}, 400
 
         except IntegrityError as e:
             logging.error(f"IntegrityError: {e}")
             db.session.rollback()
-            return jsonify({'message': 'Integrity Error: Duplicate product_id or category_id'}), 400
+            return {'message': 'Integrity Error: Duplicate product_id or category_id'}, 400
 
         except Exception as e:
             logging.error(f"An unhandled exception occurred: {e}")
             db.session.rollback()
-            return jsonify({'message': 'Internal Server Error'}), 500
+            return {'message': 'Internal Server Error'}, 500
 
         # Return a valid JSON response using the 'jsonify' function
         return {'message': 'Data ingestion successful'}, 201

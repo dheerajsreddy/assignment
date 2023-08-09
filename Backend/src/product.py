@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, current_app
 from models import db, Product
 import json
 
@@ -6,7 +6,7 @@ import json
 product_bp = Blueprint('product', __name__)
 
 @product_bp.route('/product/<string:product_id>', methods=['GET'])
-def get_product(product_id: str) -> jsonify:
+def get_product(product_id: str) :
     """
     Retrieve product details based on the provided product_id.
 
@@ -23,7 +23,7 @@ def get_product(product_id: str) -> jsonify:
             # If found in cache, return the cached result
             product_data = json.loads(cached_result)
             print("Cache Hit")
-            return jsonify(product_data), 200
+            return (product_data), 200
 
         # Retrieve the product based on product_id, or return 404 if not found
         product = Product.query.get_or_404(product_id)
@@ -41,7 +41,7 @@ def get_product(product_id: str) -> jsonify:
         current_app.redis_client.set(f'product:{product_id}', json.dumps(product_data))
         print("Cache Miss")
 
-        return jsonify(product_data), 200
+        return (product_data), 200
 
     except Exception as e:
-        return jsonify({'message': f'Internal Server Error: {str(e)}'}), 500
+        return ({'message': f'Internal Server Error: {str(e)}'}), 500
