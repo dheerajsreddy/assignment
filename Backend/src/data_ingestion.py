@@ -1,6 +1,6 @@
 import json
 import uuid
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
 import logging
@@ -79,7 +79,7 @@ class DataIngestion(Resource):
             db.session.rollback()
             return {'message': 'Internal Server Error'}, 500
 
-        # Return a valid JSON response using the 'jsonify' function
+        # Return a valid JSON response
         return {'message': 'Data ingestion successful'}, 201
 
 # Register the DataIngestion resource with the data_ingestion_bp blueprint

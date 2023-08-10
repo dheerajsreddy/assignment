@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-container
-          image: dheerajsreddy/flask-app2
+          image: dheerajsreddy/flask-app3
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -33,7 +33,7 @@ spec:
   selector:
     app: flask
   ports:
-    - name: http
+    - name: flask-port
       port: 5000
       targetPort: 5000
   type: LoadBalancer

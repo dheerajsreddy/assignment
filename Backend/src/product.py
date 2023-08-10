@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app
-from models import db, Product
+from models import Product
 import json
 
 # Create a Blueprint for the product module
@@ -23,7 +23,7 @@ def get_product(product_id: str) :
             # If found in cache, return the cached result
             product_data = json.loads(cached_result)
             print("Cache Hit")
-            return (product_data), 200
+            return product_data, 200
 
         # Retrieve the product based on product_id, or return 404 if not found
         product = Product.query.get_or_404(product_id)
@@ -41,7 +41,7 @@ def get_product(product_id: str) :
         current_app.redis_client.set(f'product:{product_id}', json.dumps(product_data))
         print("Cache Miss")
 
-        return (product_data), 200
+        return product_data, 200
 
     except Exception as e:
-        return ({'message': f'Internal Server Error: {str(e)}'}), 500
+        return {'message': f'Internal Server Error: {str(e)}'}, 500

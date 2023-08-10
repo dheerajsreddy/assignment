@@ -14,7 +14,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://unbxd:unbxd@postgres-service:5432/unbxddatabase'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
-
     # Initialize the SQLAlchemy db object with the app
     db.init_app(app)
 
@@ -26,7 +25,7 @@ def create_app():
     from data_ingestion import data_ingestion_bp
     from product import product_bp
     from category import category_bp
-    from search import create_search_bp
+    from search import search_bp
     from monitor import monitor_bp
 
     # Register blueprints with the app
@@ -34,9 +33,8 @@ def create_app():
     app.register_blueprint(data_ingestion_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(category_bp)
-    app.register_blueprint(create_search_bp())
+    app.register_blueprint(search_bp)
 
-    # Function to create tables before each request
     @app.before_request
     def create_tables():
         db.create_all()
