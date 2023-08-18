@@ -1,0 +1,7 @@
+#This file will contain metadata about your Helm chart.
+apiVersion: v2
+name: flask-chart
+description: A Helm chart for deploying Flask application
+version: 0.1.0
+
+
