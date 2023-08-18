@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+redis
+psycopg2
+flask_restful
+requests

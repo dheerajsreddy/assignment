@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "a9cbcac2-0416-496e-9605-94d6576902a5",
+		"name": "Data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28771152"
+	},
+	"item": [
+		
+		{
+			"name": "Product API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/product/00310194",
+					"protocol": "http",
+					"host": [
+						"127.0.0.1"
+					],
+					"port": "5000",
+					"path": [
+						"product",
+						"00310194"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Category Page API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/category",
+					"protocol": "http",
+					"host": [
+						"127.0.0.1"
+					],
+					"port": "5000",
+					"path": [
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Category API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/category/men",
+					"protocol": "http",
+					"host": [
+						"127.0.0.1"
+					],
+					"port": "5000",
+					"path": [
+						"category",
+						"men"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subcategory API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/category/women/Work",
+					"protocol": "http",
+					"host": [
+						"127.0.0.1"
+					],
+					"port": "5000",
+					"path": [
+						"category",
+						"women",
+						"Work"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/search?q=80001919",
+					"protocol": "http",
+					"host": [
+						"127.0.0.1"
+					],
+					"port": "5000",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "80001919"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+        - name: flask-container
+          image: {{ .Values.flask.image }}
+          imagePullPolicy: {{ .Values.flask.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.flask.port }}
+          env:
+            - name: SQLALCHEMY_DATABASE_URI
+              value: "postgresql://unbxd:unbxd@postgres-service:5432/unbxddatabase"
+            - name: REDIS_URL
+              value: "redis://redis-service:6379"
