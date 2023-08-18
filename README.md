@@ -12,10 +12,16 @@ To run on kubernetes:
 
     Create a kind cluster using the specified configurations: kind create cluster --name apparel --config=config.yaml  
 
-    Apply the deployment manifests: kubectl apply -f flask.yaml,cache.yaml,database.yaml  
+    1)Apply the deployment manifests: kubectl apply -f flask.yaml,cache.yaml,database.yaml  
 
-    Set the hostname to access locally: sudo nano /etc/hosts and set 127.0.0.1 to apparel.com  
+    Set the hostname to access locally: sudo nano /etc/hosts and set 127.0.0.1 to apparel.com
+    
+    2)Using helm for deployment(flask-chart directory):
 
+    Command: helm install flask-app .  
+
+    To run:
+    
     Port forward: kubectl port-forward service/flask-service 5000:5000
 
     Access using browser or postman or curl in terminal using :
@@ -83,3 +89,4 @@ keys * - to get all keys
 GET keyname - to get particular key
 
 Make get and post requests using postman or curl in terminal
+
