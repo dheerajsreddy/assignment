@@ -90,3 +90,6 @@ GET keyname - to get particular key
 
 Make get and post requests using postman or curl in terminal
 
+To run the postman collection (for api test cases):
+
+newman Data.postman_collection.json
